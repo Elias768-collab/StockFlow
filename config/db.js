@@ -1,5 +1,11 @@
-import 'dotenv/config'
-import { Pool } from "pg"
+// importing pg using ESM
+import pg from 'pg';
+// load .env variables with dotenv
+import dotenv from 'dotenv'
+
+dotenv.config();
+
+const { Pool } = pg
 
 const pool = new Pool({
     host: process.env.DB_HOST,
