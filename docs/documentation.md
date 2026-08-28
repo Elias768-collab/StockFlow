@@ -95,3 +95,56 @@ Controllers
 Models
       ↓
 PostgreSQL Database
+
+
+## CONTROLLER AND ROUTE LAYER
+
+### Controller Layer
+
+The Controller Layer is responsible for handling HTTP requests and responses. Controllers act as the connection between the application's routes and the Model Layer.
+
+Controllers do not contain SQL queries. Instead, they receive information from the client, call the appropriate model function, and return an HTTP response.
+
+The current product controller is located in:
+
+`controllers/productController.js`
+
+The Product Controller currently handles the following operations:
+
+- `getProducts()` — retrieves all products.
+- `getProduct()` — retrieves a single product by ID.
+- `createNewProduct()` — creates a new product using data from the request body.
+- `updateExistingProduct()` — updates an existing product using its ID and request body.
+- `deleteExistingProduct()` — deletes a product using its ID.
+
+### Route Layer
+
+The Route Layer defines the API endpoints and determines which controller handles each incoming request.
+
+The current product routes are located in:
+
+`routes/productRoutes.js`
+
+The Product API currently provides the following endpoints:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/products` | Retrieve all products |
+| GET | `/products/:id` | Retrieve a single product |
+| POST | `/products` | Create a new product |
+| PUT | `/products/:id` | Update an existing product |
+| DELETE | `/products/:id` | Delete a product |
+
+### Request and Response Flow
+
+StockFlow currently follows this request flow:
+
+Client
+  ↓
+Express Route
+  ↓
+Controller
+  ↓
+Model
+  ↓
+PostgreSQL Database
