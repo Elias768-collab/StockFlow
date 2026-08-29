@@ -9,6 +9,9 @@ import {
      deleteExistingProduct
  } from "../controllers/productController.js";
 
+ import validate from "../middleware/validationMiddleware.js";
+ import productSchema from "../validators/productValidator.js";
+
 const router = express.Router();
 
 // Get all products
@@ -17,7 +20,8 @@ router.get("/", getProducts);
 router.get("/:id", getProduct);
 
 // Create new product
-router.post("/", createNewProduct);
+// Validate(productSchema) checks req.body before the controller runs
+router.post("/", validate(productSchema),createNewProduct);
 
 // Update a product
 router.put("/:id", updateExistingProduct);

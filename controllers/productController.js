@@ -54,7 +54,7 @@ const getProduct = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error fetching product:", error);
+        console.error("Get product error:", error);
 
         res.status(500).json({
             success: false,
@@ -71,17 +71,27 @@ const createNewProduct = async (req, res) => {
 
         res.status(201).json({
             success: true,
+            message: "Product created successfully",
             data: product
         });
 
     } catch(error) {
-        console.error("Error creating new product:", error);
+        console.error("Create product error:", error);
 
-        res.status(500).json({
-            success: false,
-            message: "Failed to create new product"
-        });
+        // PostgreSQL unique violation
+        if (error.code === "23505") {
+           return res.status(409).json({
+                success: false,
+                message: "A product with this unique SKU already exists"
+            });
     }
+
+    //   Unexpected error
+      res.status(500).json({
+        success: false,
+        message: "Failed to create product"
+      }); 
+    }   
 };
 
 
@@ -92,7 +102,7 @@ const updateExistingProduct = async(req, res) => {
 
         const updatedProduct = await updateProduct(id, req.body);
 
-        // Product does not exist
+        // Product with the ID does not exist
         if (!updatedProduct) {
             return res.status(404).json({
                 success: false,
@@ -102,17 +112,26 @@ const updateExistingProduct = async(req, res) => {
 
         res.status(200).json({
             success: true,
+            message: "Product updated successfully",
             data: updatedProduct
         });
 
     } catch (error) {
         console.log("Error updating a product", error);
 
+    // Handle duplicate SKU
+     if (error.code === "23505") {
         res.status(500).json({
             success: false,
-            message: "Failed to update a product"
+            message: "Product with this SKU  already exists"
         });
     }
+
+     res.status(500).json({
+        success: false,
+        message: "Failed to update product"
+     })
+   }  
 };
 
 // Delete a product by ID
@@ -122,7 +141,7 @@ const deleteExistingProduct = async (req, res) => {
 
         const deletedProduct = await deleteProduct(id);
 
-        // Product does not exist
+        // Product with the ID does not exist
         if (!deletedProduct) {
             return res.status(404).json({
                 success: false,
@@ -132,6 +151,7 @@ const deleteExistingProduct = async (req, res) => {
 
         res.status(200).json({
             success: true,
+            message: "Product deleted successfully",
             data: deletedProduct
         });
 

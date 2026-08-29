@@ -1,15 +1,16 @@
-Project Purpose
+## PROJECT PURPOSE
 
 StockFlow is an inventory management system designed to help businesses track products, categories, and stock levels in a reliable, structured way. Rather than relying on spreadsheets or ad-hoc tools, it gives users a centralized system to record what products exist, which category each belongs to, and how much stock is on hand, with the data integrity guarantees a relational database provides: no duplicate SKUs, no negative stock, no orphaned products.
 
 The goal is a foundation that's simple enough to build on incrementally, but structured enough to grow into a full inventory/order management tool without needing a rewrite.
 
-Current Architecture
+## CURRENT ARCHITECTURE
 
 config: database configuration, connection setup, environment loading
 controllers: request/response logic, receives requests, calls models, sends responses
 database: SQL schema, table definitions, migrations, seed data
 middleware: request processing, validation, authentication, error handling
+validator: ensuring data entered meet strict rules
 models: database interaction, queries and data access logic
 routes: endpoint definitions, maps URLs to controller actions
 views: server-rendered interface, templates rendered on the backend
@@ -17,7 +18,7 @@ public: frontend assets, CSS, client-side JS, images
 
 This separation means, for example, that a change to how a product is validated lives in middleware, not scattered across controllers, and a change to how data is queried lives in models, not duplicated across routes.
 
-Database Decision: MySQL to PostgreSQL
+## Database Decision: MySQL to PostgreSQL
 
 StockFlow originally considered MySQL as the database engine, since it's a common default for many web projects. During development, MySQL's installation and local setup process introduced enough friction, configuration issues, inconsistent local environment behavior, that it started slowing down actual feature work.
 
@@ -25,13 +26,13 @@ The project switched to PostgreSQL instead. This isn't hidden or glossed over, i
 
 This is treated as a normal, healthy part of engineering, not a mistake to bury.
 
-Database Architecture
+## Database Architecture
 
 categories has a one-to-many relationship with products. A single category can have many products, but each product belongs to exactly one category. This is modeled with a category_id foreign key on the products table, referencing categories.id.
 
 Why category_id lives on products and not the other way around: in a one-to-many relationship, the foreign key always goes on the many side. If categories held a reference to products instead, a category could only ever point to one product, the opposite of what's needed. Putting category_id on products lets any number of products point back to the same category, which correctly models a category like Electronics containing many products while each product has exactly one category.
 
-Important Database Decisions
+## Important Database Decisions
 
 PostgreSQL identity columns are used for generated primary keys, GENERATED ALWAYS AS IDENTITY, rather than the older SERIAL type, since identity columns are the modern SQL-standard approach and behave more predictably with sequence ownership and permissions.
 
@@ -148,3 +149,62 @@ Controller
 Model
   ↓
 PostgreSQL Database
+
+## INPUT VALIDATION AND ERROR HANDLING
+### Joi Request Validation
+
+StockFlow uses Joi to validate incoming product data before it reaches the controller and database.
+
+Validation rules are defined separately in:
+
+`validators/productValidator.js`
+
+The validation logic is applied through reusable middleware located in:
+
+`middleware/validationMiddleware.js`
+
+The request flow is:
+
+Client → Route → Validation Middleware → Controller → Model → PostgreSQL
+
+The validation middleware receives a Joi schema and validates `req.body`. Invalid requests are stopped immediately and return a `400 Bad Request` response, while valid requests continue to the appropriate controller.
+
+The same product validation schema is currently used for both product creation and complete product updates because both operations require the same product fields.
+
+### Validation Rules
+
+Product validation currently checks:
+
+* `category_id` must be a positive integer and is required.
+* `name` must be a string between 3 and 200 characters and is required.
+* `sku` must be a string between 3 and 100 characters and is required.
+* `description` is optional and may be an empty string.
+* `unit_price` must be a number greater than or equal to zero.
+* `quantity_in_stock` must be a non-negative integer.
+* `reorder_level` must be a non-negative integer.
+* `status`, when provided, must be either `active` or `inactive`.
+
+### Improved Error Handling
+
+The API handles common and expected errors using appropriate HTTP status codes.
+
+| Situation                        | HTTP Status |
+| -------------------------------- | ----------- |
+| Successful request               | 200         |
+| Invalid request data             | 400         |
+| Product not found                | 404         |
+| Duplicate SKU                    | 409         |
+| Unexpected server/database error | 500         |
+
+PostgreSQL error code `23505` is handled specifically for duplicate SKU violations and is translated into a `409 Conflict` response.
+
+Controllers also check whether a requested, updated, or deleted product exists. If no product is found, the API returns a `404 Not Found` response instead of incorrectly reporting a successful operation.
+
+### Design Decision
+
+Validation and database constraints serve different purposes and are both retained:
+
+* Joi provides early validation and user-friendly feedback for incoming API requests.
+* PostgreSQL constraints provide final protection for database integrity.
+
+This layered approach prevents invalid data where possible while ensuring the database remains protected even if application-level validation is bypassed.

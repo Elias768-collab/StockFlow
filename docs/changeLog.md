@@ -5,7 +5,6 @@ Database foundation completed and verified in pgAdmin. The categories and produc
 Next steps: build out the models layer for querying these tables, then wire up basic routes and controllers for CRUD operations on categories and products.
 
 ## DATABASE CONNECTION AND PRODUCT MODEL LAYER
-
 ### Completed
 
 - Configured PostgreSQL database connectivity using the `pg` package.
@@ -28,7 +27,6 @@ Next steps: build out the models layer for querying these tables, then wire up b
 Temporary tests were performed from `server.js` while building the model layer. These test queries were removed after successful verification so that database operations remain the responsibility of the model and will later be called through the controller layer.
 
 ## PRODUCT CONTROLLER AND ROUTE LAYER
-
 ### Completed
 
 - Created the Product Controller in `controllers/productController.js`.
@@ -54,3 +52,26 @@ Temporary tests were performed from `server.js` while building the model layer. 
 - Tested deletion and verified that deleted products could no longer be retrieved.
 - Tested a duplicate SKU to confirm that the database constraint rejects duplicate values through the API.
 - Tested requests for products that do not exist and confirmed that the API returns a 404 response.
+
+## INPUT VALIDATION AND IMPROVED HANDLING
+### Completed
+
+* Installed and configured Joi for request validation.
+* Created a product validation schema in `validators/productValidator.js`.
+* Created reusable validation middleware in `middleware/validationMiddleware.js`.
+* Applied request validation to `POST /products`.
+* Applied request validation to `PUT /products/:id`.
+* Tested valid product requests successfully.
+* Tested negative price validation.
+* Tested missing required fields.
+* Tested invalid data types.
+* Added handling for duplicate SKU errors using PostgreSQL error code `23505`.
+* Returned `409 Conflict` for duplicate SKU attempts.
+* Added `404 Not Found` handling for nonexistent products during retrieval.
+* Added `404 Not Found` handling for nonexistent products during updates.
+* Confirmed deletion behavior and error handling for nonexistent products.
+* Retained `500 Internal Server Error` responses for unexpected failures.
+
+### Result
+
+StockFlow now validates incoming product data before it reaches the database and provides more meaningful HTTP responses for common API and database errors.
