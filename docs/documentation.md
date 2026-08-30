@@ -208,3 +208,22 @@ Validation and database constraints serve different purposes and are both retain
 * PostgreSQL constraints provide final protection for database integrity.
 
 This layered approach prevents invalid data where possible while ensuring the database remains protected even if application-level validation is bypassed.
+
+
+## QUERY PARAMETER VALIDATION
+
+Joi validation was extended to product listing query parameters.
+
+Validated parameters:
+
+* `search` — optional search term
+* `category` — optional positive integer
+* `status` — optional `active` or `inactive`
+* `page` — optional positive integer
+* `limit` — optional positive integer
+
+A reusable validation middleware validates `req.query` before the request reaches the controller.
+
+Invalid query parameters return `400 Bad Request`, while valid parameters proceed to the product listing logic.
+
+This prevents invalid search, filtering, and pagination values from reaching the database.

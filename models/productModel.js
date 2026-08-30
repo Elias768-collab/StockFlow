@@ -5,15 +5,58 @@
 import pool from '../config/db.js';
 
 // Get all products
-const getAllProducts = async () => {
+const getAllProducts = async (
+    search, 
+    category, 
+    status,
+    page,
+    limit
+) => {
 
-    /**
-     * Sends SQL query to the PostgreSQL
-     * Wait for database to respond
-     */
-    const result = await pool.query(
-        'SELECT * FROM products ORDER BY id ASC'
-    );
+    // Base query
+    let query = `SELECT * FROM products WHERE 1=1`;
+
+    // Values passed safely to PostgreSQL
+    const values = [];
+
+    // Add search filter if provided
+    // Search by name
+    if (search) {
+        values.push(`%${search}%`);
+        query += ` AND name ILIKE $${values.length}`;
+    }
+
+    // Filter by category
+    if (category) {
+        values.push(category);
+        query += ` AND category_id = $${values.length}`;
+    }
+
+    // Filter by product status
+    if (status) {
+        values.push(status);
+        query += ` AND status = $${values.length}`;
+    }
+
+    // Convert page and limit to numbers
+    const currentPage = Number(page) || 1;
+    const itemsPerPage = Number(limit) || 10;
+
+    // Calculate the number of records to skip
+    const offset = (currentPage -1) * itemsPerPage;
+
+    // Sort products before applying pagination
+    query += ' ORDER BY id ASC';
+
+    // Add LIMIT
+    values.push(itemsPerPage);
+    query += ` LIMIT $${values.length}`;
+
+    // Add OFFSET
+    values.push(offset);
+    query += ` OFFSET $${ values.length}`;
+
+    const result = await pool.query(query, values);
 
     // Rturns the information contain in the rows(e.g the actual products)
     return result.rows;

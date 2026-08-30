@@ -11,11 +11,13 @@ import {
 
  import validate from "../middleware/validationMiddleware.js";
  import productSchema from "../validators/productValidator.js";
+ import productQuerySchema from "../validators/productQueryValidator.js";
+
 
 const router = express.Router();
 
 // Get all products
-router.get("/", getProducts);
+router.get("/", validate(productQuerySchema, "query"), getProducts);
 // Get product by ID
 router.get("/:id", getProduct);
 

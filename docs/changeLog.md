@@ -75,3 +75,18 @@ Temporary tests were performed from `server.js` while building the model layer. 
 ### Result
 
 StockFlow now validates incoming product data before it reaches the database and provides more meaningful HTTP responses for common API and database errors.
+
+## PRODUCT SEARCH, FILTERING AND PAGINATION
+### Completed
+
+* Added product search by name.
+* Added category filtering.
+* Added status filtering.
+* Added pagination using `page` and `limit`.
+* Combined search, filtering, and pagination.
+* Added Joi validation for product query parameters.
+* Tested valid and invalid query parameters successfully.
+
+### Result
+
+`GET /products` now supports searching, filtering, and pagination with validated query parameters.

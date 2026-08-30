@@ -1,9 +1,12 @@
 // Recieves the schema
-const validate = (schema) => {
+const validate = (schema, source = "body") => {
     return (req, res, next) => {
 
-        // Validate request body against rules in schema
-        const { error } = schema.validate(req.body);
+        // Decide where data should come fro,
+        const data = req[source];
+
+        // Validate the selected request against rules in schema
+        const { error } = schema.validate(data);
 
         // Stop invalid request
         if (error) {

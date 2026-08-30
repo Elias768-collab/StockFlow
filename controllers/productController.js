@@ -10,8 +10,11 @@ import {
 const getProducts = async (req, res) => {
     try {
 
-        // Call the product model
-        const products = await getAllProducts();
+        // Get filters and pagination values from  URL query parameters
+        const { search, category, status, page,limit, } = req.query;
+
+        // Pass filters and pagination values to the product model
+        const products = await getAllProducts(search, category, status,page,limit);
 
         // Send a successful response message
         res.status(200).json({

@@ -2,7 +2,6 @@
 import joi from "joi";
 
 // Validation schema for creating a product
-// Validation schema for updating a product
 const productSchema = joi.object({
     category_id: joi.number()
         .integer()
