@@ -7,6 +7,9 @@ import {
     updateExistingCategory,
     removeExistingCategory
  } from "../controllers/categoryController.js";
+ 
+ import categorySchema from "../validators/categoryValidator.js";
+ import validate from "../middleware/validationMiddleware.js";
 
 const router = express.Router();
 
@@ -17,10 +20,10 @@ router.get("/", getCategories);
 router.get("/:id",getCategory);
 
 // Create a new category
-router.post("/", createNewCategory);
+router.post("/", validate(categorySchema), createNewCategory);
 
 // Update an existing category
-router.put("/:id", updateExistingCategory);
+router.put("/:id", validate(categorySchema), updateExistingCategory);
 
 // Remove an existing category from database
 router.delete("/:id", removeExistingCategory);

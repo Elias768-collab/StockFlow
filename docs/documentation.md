@@ -237,3 +237,10 @@ Implemented the category CRUD layer using PostgreSQL.
 * Tested all category operations successfully with Postman.
 * Category relationships with products are protected by the PostgreSQL foreign-key constraint.
 
+## CATEGORY VALIDATION AND ERROR HANDLING
+
+Added Joi validation for category creation and updates.
+
+Implemented category-specific error handling for duplicate category names and attempts to delete categories still assigned to products.
+
+All validation and error-handling cases were tested successfully with Postman.

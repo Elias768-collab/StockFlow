@@ -102,3 +102,11 @@ StockFlow now validates incoming product data before it reaches the database and
 * Added category controllers and routes.
 * Tested category CRUD operations successfully with Postman.
 
+## CATEGORY VALIDATION AND ERROR HANDLING
+### Completed
+
+* Added Joi category validation.
+* Applied validation to category POST and PUT routes.
+* Added duplicate-category error handling.
+* Added foreign-key deletion error handling.
+* Tested validation and category-specific errors successfully with Postman.

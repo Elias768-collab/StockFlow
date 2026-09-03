@@ -82,6 +82,14 @@ const createNewCategory = async (req, res) => {
     } catch (error) {
         console.log("Error creating category", error);
 
+        // PostgreSQL unique violation
+        if( error.code === "23505") {
+            return res.status(409).json({
+                success: false,
+                message: "Category name already exists"
+            });
+        }
+
             res.status(500).json({
             success: false,
             message: "Failed to create category"
@@ -150,6 +158,15 @@ const removeExistingCategory = async (req, res) => {
 
     } catch (error) {
         console.log("Error deleting category", error);
+
+        // Category is still referenced by products
+        // Category being used by products
+        if (error.code === "23503") {
+            return res.status(409).json({
+                success: false,
+                message: "Cannot delete category because it is assigned to one or more products"
+            })
+        }
 
         res.status(500).json({
             success: false,
