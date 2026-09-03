@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import productRoutes from "./routes/productRoute.js";
-import { getProduct } from "./controllers/productController.js";
+import categoryRoutes from "./routes/categoryRoutes.js"
 
 dotenv.config();
 
@@ -13,6 +13,9 @@ app.use(express.json());
 
 // Product routes
 app.use('/products', productRoutes);
+
+// Category routes
+app.use("/categories", categoryRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

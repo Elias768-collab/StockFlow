@@ -90,3 +90,15 @@ StockFlow now validates incoming product data before it reaches the database and
 ### Result
 
 `GET /products` now supports searching, filtering, and pagination with validated query parameters.
+
+##  CATEGORY CRUD
+### Completed
+
+* Added `getAllCategories()`
+* Added `getCategoryById()`
+* Added `createCategory()`
+* Added `updateCategory()`
+* Added `deleteCategory()`
+* Added category controllers and routes.
+* Tested category CRUD operations successfully with Postman.
+

@@ -227,3 +227,13 @@ A reusable validation middleware validates `req.query` before the request reache
 Invalid query parameters return `400 Bad Request`, while valid parameters proceed to the product listing logic.
 
 This prevents invalid search, filtering, and pagination values from reaching the database.
+
+## CATEGORY OPERATIONS
+Implemented the category CRUD layer using PostgreSQL.
+
+* Added category model functions for retrieving, creating, updating, and deleting categories.
+* Added category controllers and routes.
+* Added handling for missing categories with appropriate `404` responses.
+* Tested all category operations successfully with Postman.
+* Category relationships with products are protected by the PostgreSQL foreign-key constraint.
+
