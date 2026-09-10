@@ -244,3 +244,18 @@ Added Joi validation for category creation and updates.
 Implemented category-specific error handling for duplicate category names and attempts to delete categories still assigned to products.
 
 All validation and error-handling cases were tested successfully with Postman.
+
+
+## FRONTEND MVP
+Implemented a functional frontend for StockFlow using EJS, JavaScript, and CSS.
+
+The dashboard retrieves product data from the backend API and reflects changes made through product creation, editing, and deletion.
+
+The frontend now supports:
+
+- Viewing products
+- Adding products
+- Editing products
+- Deleting products
+
+This completes the core frontend-to-backend interaction required for the StockFlow MVP.
