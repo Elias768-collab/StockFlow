@@ -110,3 +110,14 @@ StockFlow now validates incoming product data before it reaches the database and
 * Added duplicate-category error handling.
 * Added foreign-key deletion error handling.
 * Tested validation and category-specific errors successfully with Postman.
+
+##  FUNCTIONAL FRONTEND MVP
+### Completed
+
+- Added EJS dashboard interface.
+- Connected dashboard to the product API.
+- Added functional product creation form.
+- Added functional product editing form.
+- Added product deletion from the dashboard.
+- Connected frontend actions to existing backend API endpoints.
+- Verified that frontend changes are reflected in the database and dashboard.
