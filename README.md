@@ -121,8 +121,7 @@ StockFlow/
 │
 ├── docs/
 │   └── documentation.md
-│
-├── changelog.md
+|   └── changelog.md
 ├── server.js
 ├── package.json
 ├── package-lock.json
