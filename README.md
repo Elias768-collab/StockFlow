@@ -6,7 +6,7 @@ The project combines a RESTful backend API with a functional browser-based inter
 
 ## Current Status
 
-MVP completed.
+**MVP completed.**
 
 The current MVP supports product and category management through the backend API, together with a functional frontend for viewing, creating, updating, and deleting products.
 
@@ -34,7 +34,7 @@ The current MVP supports product and category management through the backend API
 ### Validation & Error Handling
 
 * Request validation using Joi
-* Validation of product and category data
+* Product and category validation
 * Query parameter validation
 * Category and product-specific error handling
 * Appropriate HTTP status codes and responses
@@ -52,20 +52,21 @@ The current MVP supports product and category management through the backend API
 
 ## Tech Stack
 
-* **JavaScript**
-* **Node.js**
-* **Express.js**
-* **PostgreSQL**
-* **pg (node-postgres)**
-* **Joi**
-* **EJS**
-* **HTML**
-* **CSS**
-* **Git & GitHub**
+* JavaScript
+* Node.js
+* Express.js
+* PostgreSQL
+* pg (node-postgres)
+* Joi
+* EJS
+* HTML
+* CSS
+* Git & GitHub
 
 ## Architecture
 
 StockFlow follows a layered backend structure that separates responsibilities across routes, controllers, models, and validation.
+
 
 Client / Browser
        ↓
@@ -80,7 +81,6 @@ Controllers
 Models
        ↓
 PostgreSQL
-
 
 The frontend communicates with the backend through HTTP requests rather than connecting directly to the database.
 
@@ -120,13 +120,14 @@ StockFlow/
 │   └── style.css
 │
 ├── docs/
-│   └── documentation.md
-|   └── changelog.md
+│   ├── documentation.md
+│   └── changelog.md
+│
 ├── server.js
+├── README.md
 ├── package.json
 ├── package-lock.json
 └── .gitignore
-
 
 ## Running the Project Locally
 
@@ -171,13 +172,81 @@ The application can then be accessed through the local server address configured
 
 ### Categories
 
-| Method | Endpoint          | Purpose               |
-| ------ | ----------------- | --------------------- |
-| GET    | `/categories`     | Get all categories    |
-| GET    | `/categories/:id` | Get a single category |
-| POST   | `/categories`     | Create a category     |
-| PUT    | `/categories/:id` | Update a category     |
-| DELETE | `/categories/:id` | Delete a category     |
+| Method | Endpoint          | Purpose            |
+| ------ | ----------------- | ------------------ |
+| GET    | `/categories`     | Get all categories |
+| GET    | `/categories/:id` | Get all categories |
+| POST   | `/categories`     | Create a category  |
+| PUT    | `/categories/:id` | Update a category  |
+| DELETE | `/categories/:id` | Delete a category  |
+
+## Sample Request Data
+
+The following examples can be used when testing the API with Postman or another API client.
+
+### Create Product
+
+**POST `/products`**
+
+```json
+{
+  "name": "Wireless Mouse",
+  "sku": "ELEC-004",
+  "category_id": 1,
+  "description": "Ergonomic wireless mouse",
+  "unit_price": 8500,
+  "quantity_in_stock": 25,
+  "reorder_level": 5,
+  "status": "active"
+}
+```
+
+### Update Product
+
+**PUT `/products/:id`**
+
+The update endpoint accepts the same product fields. Change the values you want to update.
+
+Example:
+
+```json
+{
+  "name": "Wireless Mouse Pro",
+  "sku": "ELEC-004",
+  "category_id": 1,
+  "description": "Updated ergonomic wireless mouse",
+  "unit_price": 9500,
+  "quantity_in_stock": 30,
+  "reorder_level": 5,
+  "status": "active"
+}
+```
+
+### Create Category
+
+**POST `/categories`**
+
+```json
+{
+  "name": "Electronics",
+  "description": "Electronic devices and accessories"
+}
+```
+
+### Update Category
+
+**PUT `/categories/:id`**
+
+The update endpoint accepts the same category fields.
+
+Example:
+
+```json
+{
+  "name": "Office Electronics",
+  "description": "Electronic equipment and accessories used in office operations"
+}
+```
 
 ## Development Documentation
 
@@ -190,12 +259,11 @@ Additional project documentation is available in:
 
 The MVP establishes the core product and category management foundation for StockFlow.
 
-Future versions can expand the platform with additional inventory operations, authentication and authorization, richer analytics, suppliers, stock movement tracking, and other business-oriented features.
+Future versions can expand the platform with additional inventory operations, authentication and authorization, richer analytics, suppliers, stock movement tracking, purchase orders, sales operations, and other business-oriented features.
 
 ## Author
 
-Elias Israel
+**Elias Israel**
 
 Github repository URL: https://github.com/Elias768-collab/StockFlow
-
 Backend Developer
